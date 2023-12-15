@@ -111,7 +111,7 @@ export default env => {
       path: path.join(dirname, 'build/generated', platform),
       filename: 'index.bundle',
       chunkFilename: '[name].chunk.bundle',
-      publicPath: Repack.getPublicPath({platform, devServer}),
+      publicPath: Repack.getPublicPath({ platform, devServer }),
     },
     /**
      * Configures optimization of the built bundle.
@@ -234,6 +234,7 @@ export default env => {
       }),
       new Repack.plugins.ModuleFederationPlugin({
         name: 'news',
+        filename: 'remoteEntry.js',
         exposes: {
           './App': './src/navigation/MainNavigator',
         },
