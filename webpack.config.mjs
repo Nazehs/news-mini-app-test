@@ -259,17 +259,16 @@ export default env => {
             eager: STANDALONE,
             requiredVersion: '6.9.12',
           },
-          'react-native-safe-area-context': {
+          '@react-navigation/material-bottom-tabs': {
             singleton: true,
             eager: STANDALONE,
-            requiredVersion: '4.5.0',
-          },
-          'react-native-screens': {
-            singleton: true,
-            eager: STANDALONE,
-            requiredVersion: '3.20.0',
+            requiredVersion: '6.2.4',
           },
         },
+      }),
+      new Repack.plugins.CodeSigningPlugin({
+        privateKeyPath: './code-signing.pem',
+        outputPath: path.join('build', 'outputs', platform, 'remotes'),
       }),
     ],
   };
