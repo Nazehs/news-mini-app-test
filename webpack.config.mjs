@@ -3,7 +3,6 @@ import TerserPlugin from 'terser-webpack-plugin';
 import * as Repack from '@callstack/repack';
 
 const STANDALONE = Boolean(process.env.STANDALONE);
-
 /**
  * More documentation, installation, usage, motivation and differences with Metro is available at:
  * https://github.com/callstack/repack/blob/main/README.md
@@ -108,6 +107,7 @@ export default env => {
      */
     output: {
       clean: true,
+      hashFunction: 'xxhash64',
       path: path.join(dirname, 'build/generated', platform),
       filename: 'index.bundle',
       chunkFilename: '[name].chunk.bundle',
@@ -156,6 +156,7 @@ export default env => {
             /node_modules(.*[/\\])+@react-navigation/,
             /node_modules(.*[/\\])+@react-native-community/,
             /node_modules(.*[/\\])+@expo/,
+            /node_modules(.*[/\\])+react-freeze/,
             /node_modules(.*[/\\])+pretty-format/,
             /node_modules(.*[/\\])+metro/,
             /node_modules(.*[/\\])+abort-controller/,
@@ -234,41 +235,41 @@ export default env => {
       }),
       new Repack.plugins.ModuleFederationPlugin({
         name: 'news',
-        filename: 'remoteEntry.js',
         exposes: {
-          './App': './src/navigation/MainNavigator',
+          './NewsAppNavigator': './src/navigation/MainNavigator',
         },
         shared: {
           react: {
-            ...Repack.Federated.SHARED_REACT,
-            requiredVersion: '18.2.0',
+            singleton: true,
             eager: STANDALONE,
+            requiredVersion: '18.2.0',
           },
           'react-native': {
-            ...Repack.Federated.SHARED_REACT_NATIVE,
-            requiredVersion: '0.71.8',
+            singleton: true,
             eager: STANDALONE,
+            requiredVersion: '0.72.7',
           },
           '@react-navigation/native': {
             singleton: true,
             eager: STANDALONE,
-            requiredVersion: '6.0.13',
+            requiredVersion: '6.1.6',
           },
           '@react-navigation/native-stack': {
             singleton: true,
             eager: STANDALONE,
-            requiredVersion: '6.9.1',
+            requiredVersion: '6.9.12',
           },
-          '@react-navigation/material-bottom-tabs': {
+          'react-native-safe-area-context': {
             singleton: true,
             eager: STANDALONE,
-            requiredVersion: '6.2.4',
+            requiredVersion: '4.5.0',
+          },
+          'react-native-screens': {
+            singleton: true,
+            eager: STANDALONE,
+            requiredVersion: '3.20.0',
           },
         },
-      }),
-      new Repack.plugins.CodeSigningPlugin({
-        privateKeyPath: './code-signing.pem',
-        outputPath: path.join('build', 'outputs', platform, 'remotes'),
       }),
     ],
   };
